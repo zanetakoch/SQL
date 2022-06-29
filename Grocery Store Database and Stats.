@@ -1,0 +1,37 @@
+--Create a grocery store database
+
+CREATE TABLE grocery_store (id INTEGER PRIMARY KEY, item TEXT, aisle INTEGER, quantity TEXT, price NUMERIC);
+
+INSERT INTO grocery_store VALUES (1, "Bread", 2, "1 loaf", 1.49);
+INSERT INTO grocery_store VALUES (2, "Eggs", 3, "dozen", 2.49);
+INSERT INTO grocery_store VALUES (3, "2% milk", 3, "1 gallon", 3.99);
+INSERT INTO grocery_store VALUES (4, "Cheese", 3, "1 pound", 3.99);
+INSERT INTO grocery_store VALUES (5, "Butter", 3, "1 pound", 3.99);
+INSERT INTO grocery_store VALUES (6, "Flour", 2, "5 pounds", 2.99);
+INSERT INTO grocery_store VALUES (7, "Boneless, skinless chicken breast", 5, "1 pound", 6.49);
+INSERT INTO grocery_store VALUES (8, "Smoked bacon", 5, "12 ounces", 4.99);
+INSERT INTO grocery_store VALUES (9, "Chunk light tuna in water", 4, "5-ounce can", 0.99);
+INSERT INTO grocery_store VALUES (10, "Lemon", 1, "1 large", 0.89);
+INSERT INTO grocery_store VALUES (11, "Avocado", 1, "1 large", 1.79);
+INSERT INTO grocery_store VALUES (12, "White mushrooms", 1, "8 ounces", 2.79);
+INSERT INTO grocery_store VALUES (13, "Macaroni and cheese", 4, "7.25-ounce box", 0.99);
+INSERT INTO grocery_store VALUES (14, "Orange juice", 6, "1/2 gallon", 2.29);
+INSERT INTO grocery_store VALUES (15,"Tomato", 1, "1 pound", 1.49);
+
+--display the database ordered by price. 
+SELECT * from grocery_store 
+ORDER by price;
+
+--what is the avg price of items in aisle 3?
+SELECT AVG(price) "avg price aisle 3"
+FROM grocery_store
+WHERE aisle='3'; 
+
+--display the id, item, quantity ordered by id.
+select id, item, quantity from grocery_store group by id;
+
+--display the price, item, quantity ordered by price.
+select price, item, quantity from grocery_store group by price;
+
+--what is the sum of the prices?
+select sum(price) from grocery_store;
