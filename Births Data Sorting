@@ -1,0 +1,26 @@
+--Display the first 1,000 rows of the county_natality table
+SELECT * 
+FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
+LIMIT 1000;
+
+--1. Which 10 counties had the lowest birth count for 2016-2018?
+SELECT *
+FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
+ORDER BY Births
+ASC
+LIMIT 10;
+
+--2. Which 10 counties had the highest birth count for 2016-2018?
+SELECT *
+FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
+ORDER BY Births
+DESC
+LIMIT 10;
+
+--3. What are the top 10 counties with the highest birth counts for 2018 only?
+SELECT *
+FROM `bigquery-public-data.sdoh_cdc_wonder_natality.county_natality` 
+WHERE Year = '2018-01-01'
+ORDER BY Births
+DESC
+LIMIT 10;
