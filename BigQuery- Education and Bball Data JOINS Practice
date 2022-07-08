@@ -1,0 +1,64 @@
+--Numbers 1-4 will use the World Bank’s International Education Dataset in BigQuery.
+
+
+--1. Education table_1 has 100 rows and table_2 has 10 rows, and they share 10 keys in common.
+
+--Using INNER JOIN --> get 10 rows in results.
+SELECT COUNT(*)
+FROM table_1
+INNER JOIN table_2
+ON table_1.key = table_2.key;
+
+--Using LEFT JOIN --> get 100 rows in results.
+SELECT 
+  COUNT(*)
+FROM table_1
+LEFT JOIN table_2
+ON table_1.key = table_2.key;
+
+
+--2. Pull information from both the international_education and country_summary tables by joining the tables on the country_code foreign key, and returning the country name, country code, and value column. 
+SELECT `bigquery-public-data.world_bank_intl_education.international_education`.country_name, 
+    `bigquery-public-data.world_bank_intl_education.country_summary`.country_code, 
+    `bigquery-public-data.world_bank_intl_education.international_education`.value
+FROM `bigquery-public-data.world_bank_intl_education.international_education`
+INNER JOIN `bigquery-public-data.world_bank_intl_education.country_summary` 
+ON `bigquery-public-data.world_bank_intl_education.country_summary`.country_code = `bigquery-public-data.world_bank_intl_education.international_education`.country_code;
+
+
+--3. Use descriptive aliases to improve readability.
+SELECT edu.country_name,
+    summary.country_code,
+    edu.value
+FROM `bigquery-public-data.world_bank_intl_education.international_education` AS edu
+INNER JOIN `bigquery-public-data.world_bank_intl_education.country_summary` AS summary
+ON edu.country_code = summary.country_code;
+
+
+--4. Answer the question: What is the average amount of money spent per region on education? 
+SELECT AVG(edu.value) average_value, summary.region
+FROM `bigquery-public-data.world_bank_intl_education.international_education` AS edu
+INNER JOIN `bigquery-public-data.world_bank_intl_education.country_summary` AS summary
+ON edu.country_code = summary.country_code
+WHERE summary.region IS NOT null
+GROUP BY summary.region
+ORDER BY average_value DESC;
+
+
+
+--5. Provide data for a feature sports article on Michael Jordan’s basketball career. Find out if Michael Jordan played better at schools with animal mascots. 
+--To analyze his early career, start with the years he played basketball in college by examining National Collegiate Athletic Association (NCAA) college basketball stats from 1984. 
+--Find a list of all NCAA Division I colleges and universities; their mascots, if applicable; and their number of wins and losses in the public dataset ncaa_basketball on BigQuery.
+--I joined the season statistics from one table with the mascot information from another using a LEFT JOIN instead of an INNER JOIN, because not all teams have mascots. If I used an INNER JOIN, I would exclude teams with no mascot.
+SELECT seasons.market AS university,
+ seasons.name AS team_name,
+ seasons.wins,
+ seasons.losses,
+ seasons.ties,
+ mascots.mascot AS team_mascot
+FROM `bigquery-public-data.ncaa_basketball.mbb_historical_teams_seasons` AS seasons
+LEFT JOIN `bigquery-public-data.ncaa_basketball.mascots` AS mascots
+ON seasons.team_id = mascots.id
+WHERE seasons.season = 1984
+ AND seasons.division = 1
+ORDER BY seasons.market;
