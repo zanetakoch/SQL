@@ -1,0 +1,36 @@
+--Query a dataset and save the results into a new table using public data from the National Oceanic and Atmospheric Administration (NOAA), which has data for the entire United States. 
+
+--1. What is the temperature, wind speed, and precipitation for stations La Guardia and JFK, for every day in 2020, in descending order by date, and ascending order by Station ID?
+SELECT
+  stn,
+  date,
+  -- IF function is used to replace 9999.9 values, which the dataset description explains is the default value when temperature is missing, with NULLs instead.
+       IF(temp=9999.9, NULL, temp) 
+       AS temperature,
+
+  -- IF function is used to replace 999.9 values, which the dataset description explains is the default value when wind speed is missing, with NULLs instead.
+       IF(wdsp="999.9", NULL,
+       CAST(wdsp AS Float64)) 
+       AS wind_speed,
+
+  --IF function is used to replace 99.99 values, which the dataset description explains is the default value when precipitation is missing, with NULLs instead.
+      IF(prcp=99.99, 0, prcp) 
+      AS precipitation
+    
+FROM
+  `bigquery-public-data.noaa_gsod.gsod2020`
+WHERE
+  stn="725030" -- La Guardia
+  OR stn="744860" -- JFK
+ORDER BY
+  date DESC,
+  stn ASC;
+  
+--To make this subset of data easier to query from, save the table from the weather data into a new dataset as nyc_weather.
+
+2. What is the average temperature (from the first question)?
+SELECT
+AVG(temperature)
+FROM `airy-shuttle-315515.demos.nyc_weather` 
+WHERE date BETWEEN '2020-06-01' AND '2020-06-30'
+  
