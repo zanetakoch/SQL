@@ -1,4 +1,4 @@
-#In this SQL, I am querying a database with multiple tables in it to quantify statistics about customer and order data. 
+#Query a database with multiple tables in it to quantify statistics about customer and order data. 
 
 #1. What columns are in the customers table?
 SELECT * 
